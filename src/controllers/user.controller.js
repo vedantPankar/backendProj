@@ -2,7 +2,10 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { uploadOnCloudinary } from "../utils//cloudinary.js";
+import {
+  deleteImageFromCloudinary,
+  uploadOnCloudinary,
+} from "../utils//cloudinary.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
@@ -252,6 +255,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
 });
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
+  await deleteImageFromCloudinary(req.user?.avatar);
   const avatarLocalPath = req.file?.path;
 
   if (!avatarLocalPath) {
@@ -259,7 +263,6 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   }
 
   const avatar = await uploadOnCloudinary(avatarLocalPath);
-  console.log(avatar.url);
 
   if (!avatar.url) {
     throw new ApiError(400, "error while uploading avatar");
@@ -281,6 +284,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 });
 
 const updateUserCoverImage = asyncHandler(async (req, res) => {
+  await deleteImageFromCloudinary(req.user?.coverImage);
   const coverImageLocalPath = req.file?.path;
 
   if (!coverImageLocalPath) {

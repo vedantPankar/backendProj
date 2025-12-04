@@ -63,4 +63,12 @@ const uploadVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, newVideo, "video uploaded successfully"));
 });
 
+const updateVideo = asyncHandler(async (req, res) => {
+  const video = await Video.findById(req.params);
+
+  if (!video) {
+    throw new ApiError(400, "No video found with the given ID");
+  }
+});
+
 export { getAllVideos, getVideoByID, uploadVideo };

@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import { extractPublicId } from "cloudinary-build-url";
 import fs from "fs";
 
 cloudinary.config({
@@ -15,7 +16,6 @@ const uploadOnCloudinary = async (localFilePath) => {
       resource_type: "auto",
     });
 
-    // console.log(response.url);
     fs.unlinkSync(localFilePath);
     return response;
   } catch (error) {
@@ -24,8 +24,20 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-const deleteImageFromCloudinary = async (public_id) => {
-  return cloudinary.uploader.destroy(public_id, { resource_type: "image" });
+const deleteImageFromCloudinary = async (url) => {
+  const public_id = extractPublicId(url);
+
+  await cloudinary.uploader.destroy(public_id, { resource_type: "image" });
 };
 
-export { uploadOnCloudinary, deleteImageFromCloudinary };
+const deleteVideoFromCloudinary = async (url) => {
+  const public_id = extractPublicId(url);
+
+  await cloudinary.uploader.destroy(public_id, { resource_type: "video" });
+};
+
+export {
+  uploadOnCloudinary,
+  deleteImageFromCloudinary,
+  deleteVideoFromCloudinary,
+};
