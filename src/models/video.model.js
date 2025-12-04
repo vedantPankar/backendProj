@@ -31,14 +31,14 @@ const videoSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    isPublised: {
+    isPublished: {
       type: Boolean,
-      required: true,
+      required: false,
     },
   },
   { timestamps: true }
 );
 
-videoSchema.plugin(mongooseAggregatePaginate)
+videoSchema.plugin(mongooseAggregatePaginate);
 
 export const Video = mongoose.model("Video", videoSchema);
