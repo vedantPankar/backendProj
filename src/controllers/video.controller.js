@@ -5,11 +5,25 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
-  const video = await Video.find();
+  const videos = await Video.find();
 
   res
     .status(200)
-    .json(new ApiResponse(200, video, "Videos fetched successfully"));
+    .json(new ApiResponse(200, videos, "Videos fetched successfully"));
+});
+
+const getVideoByID = asyncHandler(async (req, res) => {
+  const { videoID } = req.params;
+
+  const video = await Video.findById(videoID);
+
+  if (!video) {
+    throw new ApiError(400, "No video found");
+  }
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, video, "Video fetched successfully"));
 });
 
 const uploadVideo = asyncHandler(async (req, res) => {
@@ -36,7 +50,7 @@ const uploadVideo = asyncHandler(async (req, res) => {
   const newVideo = await Video.create({
     videoFile: videoFile.url,
     thumbnail: thumbnail.url,
-    owner: req.user.uesrname,
+    owner: req.user._id,
     title: title,
     description: description,
     duration: videoFile.duration,
@@ -49,4 +63,4 @@ const uploadVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, newVideo, "video uploaded successfully"));
 });
 
-export { getAllVideos, uploadVideo };
+export { getAllVideos, getVideoByID, uploadVideo };
