@@ -4,6 +4,14 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
+const getAllVideos = asyncHandler(async (req, res) => {
+  const video = await Video.find();
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, video, "Videos fetched successfully"));
+});
+
 const uploadVideo = asyncHandler(async (req, res) => {
   const videoFileLocalPath = req.files?.videoFile[0]?.path;
   const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
@@ -41,4 +49,4 @@ const uploadVideo = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, newVideo, "video uploaded successfully"));
 });
 
-export { uploadVideo };
+export { getAllVideos, uploadVideo };
