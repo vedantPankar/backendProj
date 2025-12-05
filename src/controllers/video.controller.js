@@ -1,4 +1,3 @@
-import { upload } from "../middlewares/multer.middleware.js";
 import { Video } from "../models/video.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
