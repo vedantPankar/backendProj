@@ -33,7 +33,7 @@ const videoSchema = new mongoose.Schema(
     },
     isPublished: {
       type: Boolean,
-      required: false,
+      required: true,
     },
   },
   { timestamps: true }
